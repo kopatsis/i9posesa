@@ -234,7 +234,7 @@ func createRepStatic(secs float32, stretch assets.StaticStr, imageSetMap map[str
 
 func getCorrespondingExer(ctx context.Context, collection *mongo.Collection, name string) (assets.Exercise, error) {
 	var result assets.Exercise
-	err := collection.FindOne(context.Background(), bson.M{"name": name}).Decode(&result)
+	err := collection.FindOne(ctx, bson.M{"name": name}).Decode(&result)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return assets.Exercise{}, err
@@ -248,7 +248,7 @@ func getCorrespondingExer(ctx context.Context, collection *mongo.Collection, nam
 
 func getCorrespondingDynamic(ctx context.Context, collection *mongo.Collection, name string) (assets.DynamicStr, error) {
 	var result assets.DynamicStr
-	err := collection.FindOne(context.Background(), bson.M{"name": name}).Decode(&result)
+	err := collection.FindOne(ctx, bson.M{"name": name}).Decode(&result)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return assets.DynamicStr{}, err
@@ -262,7 +262,7 @@ func getCorrespondingDynamic(ctx context.Context, collection *mongo.Collection, 
 
 func getCorrespondingStatic(ctx context.Context, collection *mongo.Collection, name string) (assets.StaticStr, error) {
 	var result assets.StaticStr
-	err := collection.FindOne(context.Background(), bson.M{"name": name}).Decode(&result)
+	err := collection.FindOne(ctx, bson.M{"name": name}).Decode(&result)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return assets.StaticStr{}, err

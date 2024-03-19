@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"i9posesa/assets"
 	"i9posesa/fromxl"
 	"i9posesa/mong"
 	"i9posesa/toxl"
@@ -122,6 +123,24 @@ func main() {
 	}
 
 	err = toxl.WriteToXL("Samples", sampleIDs)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	transition, err := fromxl.GetTransitions(allImageSets)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	transitionIDs, err := mong.InsertTransition(ctx, database.Collection("transition"), []assets.TransitionMatrix{transition})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	err = toxl.WriteTransitionXL(transitionIDs)
 	if err != nil {
 		fmt.Println(err)
 		return

@@ -47,6 +47,27 @@ func WriteToXL(sheet string, data []primitive.ObjectID) error {
 	return nil
 }
 
+func WriteTransitionXL(data []primitive.ObjectID) error {
+	f, err := excelize.OpenFile("assets/posesaxl.xlsx")
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	defer func() {
+		if err := f.Close(); err != nil {
+			fmt.Println(err)
+		}
+	}()
+
+	err = f.SetCellStr("Transitions", "B1", data[0].Hex())
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func WriteToXLDblRow(sheet string, data []primitive.ObjectID) error {
 	f, err := excelize.OpenFile("assets/posesaxl.xlsx")
 	if err != nil {

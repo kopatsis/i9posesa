@@ -68,3 +68,16 @@ type Sample struct {
 	Type        string             `bson:"reps"`
 	ExOrStID    string             `bson:"exorstid"`
 }
+
+type TransitionRep struct {
+	ImageSetIDs []string  `bson:"imagesetids"`
+	Times       []float32 `bson:"times"`
+	FullTime    float32   `bson:"fulltime"`
+}
+
+type TransitionMatrix struct {
+	ID            primitive.ObjectID    `bson:"_id,omitempty"`
+	FastMatrix    [11][11]TransitionRep `bson:"fastmatrix"`
+	RegularMatrix [11][11]TransitionRep `bson:"regularmatrix"`
+	SlowMatrix    [11][11]TransitionRep `bson:"slowmatrix"`
+}

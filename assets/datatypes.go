@@ -17,6 +17,7 @@ type Exercise struct {
 	Name           string             `bson:"name"`
 	MaxSecs        float32            `bson:"maxsecs"`
 	MinSecs        float32            `bson:"minsecs"`
+	Parent         string             `bson:"parent"`
 	PositionSlice1 []ExerPosition     `bson:"positions1"`
 	PositionSlice2 []ExerPosition     `bson:"positions2"`
 	SampleID       string             `bson:"sampleid"`

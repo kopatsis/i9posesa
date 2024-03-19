@@ -53,12 +53,17 @@ func GetExercises(imageSetMap map[string]string) ([]assets.Exercise, error) {
 				return nil, err
 			}
 
-			minSecsStr, err := f.GetCellValue("Exercises", "C"+strconv.Itoa(i))
+			minSecsStr, err := f.GetCellValue("Exercises", "D"+strconv.Itoa(i))
 			if err != nil {
 				return nil, err
 			}
 
 			minSecs, err := strconv.ParseFloat(minSecsStr, 32)
+			if err != nil {
+				return nil, err
+			}
+
+			parent, err := f.GetCellValue("Exercises", "E"+strconv.Itoa(i))
 			if err != nil {
 				return nil, err
 			}
@@ -72,6 +77,7 @@ func GetExercises(imageSetMap map[string]string) ([]assets.Exercise, error) {
 				Name:           name,
 				MaxSecs:        float32(maxSecs),
 				MinSecs:        float32(minSecs),
+				Parent:         parent,
 				PositionSlice1: posList1,
 			})
 
@@ -100,7 +106,7 @@ func getPosList(row string, f *excelize.File, imageSetMap map[string]string) ([]
 
 	ret := []assets.ExerPosition{}
 
-	startCol := 5
+	startCol := 6
 
 	columnName, err := excelize.ColumnNumberToName(startCol)
 	if err != nil {

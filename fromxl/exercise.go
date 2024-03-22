@@ -68,9 +68,24 @@ func GetExercises(imageSetMap map[string]string) ([]assets.Exercise, error) {
 				return nil, err
 			}
 
+			imagesetinit, err := f.GetCellValue("Exercises", "E"+strconv.Itoa(i))
+			if err != nil {
+				return nil, err
+			}
+
 			posList1, err := getPosList(strconv.Itoa(i), f, imageSetMap)
 			if err != nil {
 				return nil, err
+			}
+
+			imageSetID0, ok := "", false
+			if imagesetinit != "" {
+				imageSetID0, ok = imageSetMap[imagesetinit]
+				if !ok {
+					return nil, errors.New("image set name not in existing list in db")
+				}
+			} else {
+				imageSetID0 = posList1[0].ImageSetID
 			}
 
 			exers = append(exers, assets.Exercise{
@@ -78,6 +93,7 @@ func GetExercises(imageSetMap map[string]string) ([]assets.Exercise, error) {
 				MaxSecs:        float32(maxSecs),
 				MinSecs:        float32(minSecs),
 				Parent:         parent,
+				ImageSetID0:    imageSetID0,
 				PositionSlice1: posList1,
 			})
 
@@ -106,7 +122,7 @@ func getPosList(row string, f *excelize.File, imageSetMap map[string]string) ([]
 
 	ret := []assets.ExerPosition{}
 
-	startCol := 6
+	startCol := 7
 
 	columnName, err := excelize.ColumnNumberToName(startCol)
 	if err != nil {

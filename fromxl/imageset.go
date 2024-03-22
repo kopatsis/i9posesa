@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-var arraySize = 4
+var arraySize = 6
 
 func GetImageSets() ([]assets.ImageSet, error) {
 	f, err := excelize.OpenFile("assets/posesaxl.xlsx")

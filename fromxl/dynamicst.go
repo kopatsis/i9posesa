@@ -47,8 +47,14 @@ func GetDynamics(imageSetMap map[string]string) ([]assets.DynamicStr, error) {
 			}
 
 			dynamics[len(dynamics)-1].PositionSlice2 = posList2
+
 		} else {
 			secs, err := strconv.ParseFloat(secsStr, 32)
+			if err != nil {
+				return nil, err
+			}
+
+			separates, err := f.GetCellValue("DynamicStretches", "D"+strconv.Itoa(i))
 			if err != nil {
 				return nil, err
 			}
@@ -61,6 +67,7 @@ func GetDynamics(imageSetMap map[string]string) ([]assets.DynamicStr, error) {
 			dynamics = append(dynamics, assets.DynamicStr{
 				Name:           name,
 				Secs:           float32(secs),
+				SeparateSets:   separates != "",
 				PositionSlice1: posList1,
 			})
 
@@ -89,7 +96,7 @@ func getPosListDynamic(row string, f *excelize.File, imageSetMap map[string]stri
 
 	ret := []assets.StrPosition{}
 
-	startCol := 4
+	startCol := 5
 
 	columnName, err := excelize.ColumnNumberToName(startCol)
 	if err != nil {

@@ -157,7 +157,7 @@ func createRepExer(secs float32, exer assets.Exercise, imageSetMap map[string]as
 			if pos.Hardcoded {
 				times = append(times, pos.HardcodedSecs)
 			} else {
-				times = append(times, 0.5*pos.PercentSecs*copySecs)
+				times = append(times, pos.PercentSecs*copySecs)
 			}
 			positions = append(positions, imageSetMap[pos.ImageSetID].Mid)
 		}
@@ -165,13 +165,13 @@ func createRepExer(secs float32, exer assets.Exercise, imageSetMap map[string]as
 			if pos.Hardcoded {
 				times = append(times, pos.HardcodedSecs)
 			} else {
-				times = append(times, 0.5*pos.PercentSecs*copySecs)
+				times = append(times, pos.PercentSecs*copySecs)
 			}
 			positions = append(positions, imageSetMap[pos.ImageSetID].Mid)
 		}
 
 		ret.Positions = positions
-		ret.FullTime = secs
+		ret.FullTime = 2 * secs
 		ret.Times = times
 	}
 
@@ -196,16 +196,16 @@ func createRepDynamic(secs float32, stretch assets.DynamicStr, imageSetMap map[s
 
 		positions, times := [][]string{}, []float32{}
 		for _, pos := range stretch.PositionSlice1 {
-			times = append(times, 0.5*pos.PercentSecs*secs)
+			times = append(times, pos.PercentSecs*secs)
 			positions = append(positions, imageSetMap[pos.ImageSetID].Mid)
 		}
 		for _, pos := range stretch.PositionSlice2 {
-			times = append(times, 0.5*pos.PercentSecs*secs)
+			times = append(times, pos.PercentSecs*secs)
 			positions = append(positions, imageSetMap[pos.ImageSetID].Mid)
 		}
 
 		ret.Positions = positions
-		ret.FullTime = secs
+		ret.FullTime = 2 * secs
 		ret.Times = times
 	}
 

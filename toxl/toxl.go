@@ -16,7 +16,7 @@ func WriteToXL(sheet string, data []primitive.ObjectID) error {
 	}
 
 	defer func() {
-		if err := f.Close(); err != nil {
+		if err := f.Save(); err != nil {
 			fmt.Println(err)
 		}
 	}()
@@ -48,6 +48,11 @@ func WriteToXL(sheet string, data []primitive.ObjectID) error {
 }
 
 func WriteTransitionXL(data []primitive.ObjectID) error {
+
+	if len(data) == 0 {
+		return nil
+	}
+
 	f, err := excelize.OpenFile("assets/posesaxl.xlsx")
 	if err != nil {
 		fmt.Println(err)
@@ -55,7 +60,7 @@ func WriteTransitionXL(data []primitive.ObjectID) error {
 	}
 
 	defer func() {
-		if err := f.Close(); err != nil {
+		if err := f.Save(); err != nil {
 			fmt.Println(err)
 		}
 	}()
@@ -76,7 +81,7 @@ func WriteToXLDblRow(sheet string, data []primitive.ObjectID) error {
 	}
 
 	defer func() {
-		if err := f.Close(); err != nil {
+		if err := f.Save(); err != nil {
 			fmt.Println(err)
 		}
 	}()

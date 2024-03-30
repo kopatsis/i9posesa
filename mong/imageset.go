@@ -11,9 +11,9 @@ import (
 
 func InsertImageSetsMongo(ctx context.Context, collection *mongo.Collection, structs []assets.ImageSet) ([]primitive.ObjectID, error) {
 
-	ids := make([]primitive.ObjectID, len(structs))
+	ids := []primitive.ObjectID{}
 
-	for i, item := range structs {
+	for _, item := range structs {
 		var id primitive.ObjectID
 		if item.ID.IsZero() {
 			// Insert the item
@@ -22,9 +22,9 @@ func InsertImageSetsMongo(ctx context.Context, collection *mongo.Collection, str
 				return nil, err
 			}
 			id = res.InsertedID.(primitive.ObjectID)
+			ids = append(ids, id)
 		} else {
 			// Update the item
-			id = item.ID
 			filter := bson.M{"_id": item.ID}
 			_, err := collection.ReplaceOne(ctx, filter, item)
 			if err != nil {
@@ -32,7 +32,6 @@ func InsertImageSetsMongo(ctx context.Context, collection *mongo.Collection, str
 			}
 		}
 
-		ids[i] = id
 	}
 
 	return ids, nil

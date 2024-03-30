@@ -42,7 +42,7 @@ func GetTransitions(allImageSets map[string]string) (assets.TransitionMatrix, er
 
 		row := strconv.Itoa(i)
 
-		name, err := f.GetCellValue("Samples", "D"+row)
+		name, err := f.GetCellValue("Transitions", "D"+row)
 		if err != nil {
 			return matrix, err
 		}
@@ -73,6 +73,7 @@ func GetTransitions(allImageSets map[string]string) (assets.TransitionMatrix, er
 
 			imageID, ok := allImageSets[name]
 			if !ok {
+				fmt.Println(name)
 				return matrix, errors.New("image name doesn't exist for transitions")
 			}
 
@@ -148,7 +149,7 @@ func GetTransitions(allImageSets map[string]string) (assets.TransitionMatrix, er
 			}
 		}
 
-		index1St, err := f.GetCellValue("Samples", "A"+row)
+		index1St, err := f.GetCellValue("Transitions", "A"+row)
 		if err != nil {
 			return matrix, err
 		}
@@ -158,7 +159,7 @@ func GetTransitions(allImageSets map[string]string) (assets.TransitionMatrix, er
 			return matrix, err
 		}
 
-		index2St, err := f.GetCellValue("Samples", "B"+row)
+		index2St, err := f.GetCellValue("Transitions", "B"+row)
 		if err != nil {
 			return matrix, err
 		}

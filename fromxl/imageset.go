@@ -54,9 +54,9 @@ func GetImageSets() ([]assets.ImageSet, error) {
 		}
 
 		start, low := 3, []string{}
-		for i := 0; i < arraySize; i++ {
+		for j := 0; j < arraySize; j++ {
 
-			columnName, err := excelize.ColumnNumberToName(start + i)
+			columnName, err := excelize.ColumnNumberToName(start + j)
 			if err != nil {
 				return nil, err
 			}
@@ -70,9 +70,9 @@ func GetImageSets() ([]assets.ImageSet, error) {
 		current.Low = low
 
 		start, mid := 3+arraySize, []string{}
-		for i := 0; i < arraySize; i++ {
+		for j := 0; j < arraySize; j++ {
 
-			columnName, err := excelize.ColumnNumberToName(start + i)
+			columnName, err := excelize.ColumnNumberToName(start + j)
 			if err != nil {
 				return nil, err
 			}
@@ -86,9 +86,9 @@ func GetImageSets() ([]assets.ImageSet, error) {
 		current.Mid = mid
 
 		start, high := 3+(2*arraySize), []string{}
-		for i := 0; i < arraySize; i++ {
+		for j := 0; j < arraySize; j++ {
 
-			columnName, err := excelize.ColumnNumberToName(start + i)
+			columnName, err := excelize.ColumnNumberToName(start + j)
 			if err != nil {
 				return nil, err
 			}
@@ -102,9 +102,9 @@ func GetImageSets() ([]assets.ImageSet, error) {
 		current.High = high
 
 		start, original := 3+(3*arraySize), []string{}
-		for i := 0; i < arraySize; i++ {
+		for j := 0; j < arraySize; j++ {
 
-			columnName, err := excelize.ColumnNumberToName(start + i)
+			columnName, err := excelize.ColumnNumberToName(start + j)
 			if err != nil {
 				return nil, err
 			}

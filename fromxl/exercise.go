@@ -68,7 +68,7 @@ func GetExercises(imageSetMap map[string]string) ([]assets.Exercise, error) {
 				return nil, err
 			}
 
-			imagesetinit, err := f.GetCellValue("Exercises", "E"+strconv.Itoa(i))
+			imagesetinit, err := f.GetCellValue("Exercises", "F"+strconv.Itoa(i))
 			if err != nil {
 				return nil, err
 			}
@@ -82,7 +82,9 @@ func GetExercises(imageSetMap map[string]string) ([]assets.Exercise, error) {
 			if imagesetinit != "" {
 				imageSetID0, ok = imageSetMap[imagesetinit]
 				if !ok {
+					fmt.Println("E" + strconv.Itoa(i))
 					return nil, errors.New("image set name not in existing list in db")
+
 				}
 			} else {
 				imageSetID0 = posList1[0].ImageSetID
@@ -148,6 +150,7 @@ func getPosList(row string, f *excelize.File, imageSetMap map[string]string) ([]
 
 		imageSetID, ok := imageSetMap[posName]
 		if !ok {
+			fmt.Println(columnName + row)
 			return nil, errors.New("image set name not in existing list in db")
 		}
 
@@ -173,9 +176,14 @@ func getPosList(row string, f *excelize.File, imageSetMap map[string]string) ([]
 			return nil, err
 		}
 
-		hardcodedSecs, err := strconv.ParseFloat(hardcodedSecsStr, 32)
-		if err != nil {
-			return nil, err
+		var hardcodedSecs float64
+		if hardcodedSecsStr == "" {
+			hardcodedSecs = 0
+		} else {
+			hardcodedSecs, err = strconv.ParseFloat(hardcodedSecsStr, 32)
+			if err != nil {
+				return nil, err
+			}
 		}
 
 		startCol++
@@ -189,9 +197,14 @@ func getPosList(row string, f *excelize.File, imageSetMap map[string]string) ([]
 			return nil, err
 		}
 
-		maxSecs, err := strconv.ParseFloat(maxSecsStr, 32)
-		if err != nil {
-			return nil, err
+		var maxSecs float64
+		if maxSecsStr == "" {
+			maxSecs = 0
+		} else {
+			maxSecs, err = strconv.ParseFloat(maxSecsStr, 32)
+			if err != nil {
+				return nil, err
+			}
 		}
 
 		startCol++
@@ -205,9 +218,14 @@ func getPosList(row string, f *excelize.File, imageSetMap map[string]string) ([]
 			return nil, err
 		}
 
-		percentSecs, err := strconv.ParseFloat(percentSecsStr, 32)
-		if err != nil {
-			return nil, err
+		var percentSecs float64
+		if percentSecsStr == "" {
+			percentSecs = 0
+		} else {
+			percentSecs, err = strconv.ParseFloat(percentSecsStr, 32)
+			if err != nil {
+				return nil, err
+			}
 		}
 
 		ret = append(ret, assets.ExerPosition{

@@ -67,8 +67,8 @@ type Sample struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
 	Name        string             `bson:"name"`
 	Description string             `bson:"description"`
-	Rep         Rep                `bson:"reps"`
-	Type        string             `bson:"reps"`
+	Reps        Rep                `bson:"reps"`
+	Type        string             `bson:"type"`
 	ExOrStID    string             `bson:"exorstid"`
 }
 

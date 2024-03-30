@@ -122,6 +122,7 @@ func getPosListDynamic(row string, f *excelize.File, imageSetMap map[string]stri
 
 		imageSetID, ok := imageSetMap[posName]
 		if !ok {
+			fmt.Println(columnName + row)
 			return nil, errors.New("image set name not in existing list in db")
 		}
 

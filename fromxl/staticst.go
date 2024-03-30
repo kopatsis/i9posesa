@@ -25,7 +25,7 @@ func GetStatics(imageSetMap map[string]string) ([]assets.StaticStr, error) {
 
 	statics := []assets.StaticStr{}
 
-	for i := 3; i < 1000; i++ {
+	for i := 2; i < 1000; i++ {
 		name, err := f.GetCellValue("StaticStretches", "B"+strconv.Itoa(i))
 		if err != nil {
 			return nil, err
@@ -70,7 +70,7 @@ func GetStatics(imageSetMap map[string]string) ([]assets.StaticStr, error) {
 		}
 
 		if posName2 != "" {
-			imageSetID, ok = imageSetMap[posName]
+			imageSetID, ok = imageSetMap[posName2]
 			if !ok {
 				return nil, errors.New("image set name not in existing list in db")
 			}

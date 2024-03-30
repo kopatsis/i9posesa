@@ -28,7 +28,7 @@ func GetSampleAndProcess(database *mongo.Database, ctx context.Context, imageSet
 		}
 	}()
 
-	for i := 3; i < 1000; i++ {
+	for i := 2; i < 1000; i++ {
 		name, err := f.GetCellValue("Samples", "B"+strconv.Itoa(i))
 		if err != nil {
 			return nil, err
@@ -60,7 +60,6 @@ func GetSampleAndProcess(database *mongo.Database, ctx context.Context, imageSet
 		}
 
 		if id != "" {
-
 			primID, err := primitive.ObjectIDFromHex(id)
 			if err != nil {
 				return nil, err
@@ -85,23 +84,23 @@ func GetSampleAndProcess(database *mongo.Database, ctx context.Context, imageSet
 				return nil, err
 			}
 			samples[len(samples)-1].ExOrStID = exer.ID.Hex()
-			samples[len(samples)-1].Rep = createRepExer(secs, exer, imageSetMap)
+			samples[len(samples)-1].Reps = createRepExer(secs, exer, imageSetMap)
 
-		} else if dtype == "StaticStretch" {
+		} else if dtype == "Static Stretch" {
 			static, err := getCorrespondingStatic(ctx, database.Collection("staticstretch"), name)
 			if err != nil {
 				return nil, err
 			}
 			samples[len(samples)-1].ExOrStID = static.ID.Hex()
-			samples[len(samples)-1].Rep = createRepStatic(secs, static, imageSetMap)
+			samples[len(samples)-1].Reps = createRepStatic(secs, static, imageSetMap)
 
-		} else if dtype == "DynamicStretch" {
+		} else if dtype == "Dynamic Stretch" {
 			dynamic, err := getCorrespondingDynamic(ctx, database.Collection("dynamicstretch"), name)
 			if err != nil {
 				return nil, err
 			}
 			samples[len(samples)-1].ExOrStID = dynamic.ID.Hex()
-			samples[len(samples)-1].Rep = createRepDynamic(secs, dynamic, imageSetMap)
+			samples[len(samples)-1].Reps = createRepDynamic(secs, dynamic, imageSetMap)
 
 		} else {
 			return nil, errors.New("provided type doesn't exist")
@@ -216,7 +215,7 @@ func createRepStatic(secs float32, stretch assets.StaticStr, imageSetMap map[str
 
 	ret := assets.Rep{}
 
-	if stretch.ImageSetID2 != "" {
+	if stretch.ImageSetID2 == "" {
 		positions := imageSetMap[stretch.ImageSetID1].Mid
 		ret.Positions = [][]string{positions}
 		ret.FullTime = secs

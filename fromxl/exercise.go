@@ -90,12 +90,18 @@ func GetExercises(imageSetMap map[string]string) ([]assets.Exercise, error) {
 				imageSetID0 = posList1[0].ImageSetID
 			}
 
+			backendID, err := f.GetCellValue("Exercises", "G"+strconv.Itoa(i))
+			if err != nil {
+				return nil, err
+			}
+
 			exers = append(exers, assets.Exercise{
 				Name:           name,
 				MaxSecs:        float32(maxSecs),
 				MinSecs:        float32(minSecs),
 				Parent:         parent,
 				ImageSetID0:    imageSetID0,
+				BackendID:      backendID,
 				PositionSlice1: posList1,
 			})
 
@@ -124,7 +130,7 @@ func getPosList(row string, f *excelize.File, imageSetMap map[string]string) ([]
 
 	ret := []assets.ExerPosition{}
 
-	startCol := 7
+	startCol := 8
 
 	columnName, err := excelize.ColumnNumberToName(startCol)
 	if err != nil {

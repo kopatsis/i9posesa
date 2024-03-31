@@ -8,16 +8,24 @@ import (
 	"i9posesa/mong"
 	"i9posesa/toxl"
 	"log"
+	"os"
 
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func main() {
 
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Failed to load the env vars: %v", err)
+	}
+
 	ctx := context.Background()
 
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
+	connectStr := os.Getenv("MONGOSTRING")
+	clientOptions := options.Client().ApplyURI(connectStr).SetServerAPIOptions(serverAPI)
 
 	client, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
@@ -130,7 +138,7 @@ func main() {
 	}
 
 	fmt.Println("Samples Write Mongo: ")
-	sampleIDs, err := mong.InsertSamples(ctx, database.Collection("sample"), samples)
+	sampleIDs, err := mong.InsertSamples(ctx, database, samples)
 	if err != nil {
 		fmt.Println(err)
 		return

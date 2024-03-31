@@ -45,9 +45,15 @@ func GetStatics(imageSetMap map[string]string) ([]assets.StaticStr, error) {
 			return nil, errors.New("image set name not in existing list in db")
 		}
 
+		backendID, err := f.GetCellValue("StaticStretches", "E"+strconv.Itoa(i))
+		if err != nil {
+			return nil, err
+		}
+
 		statics = append(statics, assets.StaticStr{
 			Name:        name,
 			ImageSetID1: imageSetID,
+			BackendID:   backendID,
 		})
 
 		id, err := f.GetCellValue("StaticStretches", "A"+strconv.Itoa(i))

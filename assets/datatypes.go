@@ -2,28 +2,45 @@ package assets
 
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
-type ImageSet struct {
-	ID       primitive.ObjectID `bson:"_id,omitempty"`
-	Low      []string           `bson:"low"`
-	Mid      []string           `bson:"mid"`
-	High     []string           `bson:"high"`
-	Original []string           `bson:"original"`
-	Name     string             `bson:"name"`
+// Deprecated
+// type ImageSet struct {
+// 	ID       primitive.ObjectID `bson:"_id,omitempty"`
+// 	Low      []string           `bson:"low"`
+// 	Mid      []string           `bson:"mid"`
+// 	High     []string           `bson:"high"`
+// 	Original []string           `bson:"original"`
+// 	Name     string             `bson:"name"`
+// }
+
+type ExerPosition struct {
+	ImageSetID    string  `bson:"imageset"`
+	Hardcoded     bool    `bson:"hardcoded"`
+	HardcodedSecs float32 `bson:"hardcodedsecs"`
+	MaxSecs       float32 `bson:"maxsecs"` // ?
+	PercentSecs   float32 `bson:"percentsecs"`
 }
 
+// Exists in DB as part of other entry
+type StrPosition struct {
+	ImageSetID  string  `bson:"imageset"`
+	PercentSecs float32 `bson:"percentsecs"`
+}
+
+// Exists in DB as actual entry
 type Exercise struct {
 	ID             primitive.ObjectID `bson:"_id,omitempty"`
 	BackendID      string             `bson:"backendID"`
 	Name           string             `bson:"name"`
+	Parent         string             `bson:"parent"`
 	MaxSecs        float32            `bson:"maxsecs"`
 	MinSecs        float32            `bson:"minsecs"`
-	Parent         string             `bson:"parent"`
 	ImageSetID0    string             `bson:"imageset0"`
 	PositionSlice1 []ExerPosition     `bson:"positions1"`
 	PositionSlice2 []ExerPosition     `bson:"positions2"`
 	SampleID       string             `bson:"sampleid"`
 }
 
+// Exists in DB as actual entry
 type DynamicStr struct {
 	ID             primitive.ObjectID `bson:"_id,omitempty"`
 	BackendID      string             `bson:"backendID"`
@@ -35,6 +52,7 @@ type DynamicStr struct {
 	SampleID       string             `bson:"sampleid"`
 }
 
+// Exists in DB as actual entry
 type StaticStr struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
 	BackendID   string             `bson:"backendID"`
@@ -44,25 +62,14 @@ type StaticStr struct {
 	SampleID    string             `bson:"sampleid"`
 }
 
-type ExerPosition struct {
-	ImageSetID    string  `bson:"imageset"`
-	Hardcoded     bool    `bson:"hardcoded"`
-	HardcodedSecs float32 `bson:"hardcodedsecs"`
-	MaxSecs       float32 `bson:"maxsecs"` // ?
-	PercentSecs   float32 `bson:"percentsecs"`
-}
-
-type StrPosition struct {
-	ImageSetID  string  `bson:"imageset"`
-	PercentSecs float32 `bson:"percentsecs"`
-}
-
+// Exists in DB as part of other entry
 type Rep struct {
-	Positions [][]string `bson:"positions"`
-	Times     []float32  `bson:"times"`
-	FullTime  float32    `bson:"fulltime"`
+	Positions []string  `bson:"positions"`
+	Times     []float32 `bson:"times"`
+	FullTime  float32   `bson:"fulltime"`
 }
 
+// Exists in DB as actual entry
 type Sample struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
 	Name        string             `bson:"name"`

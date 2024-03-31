@@ -40,35 +40,14 @@ func main() {
 	database := client.Database("i9pos")
 
 	fmt.Println("ImageSets: ")
-	imageSets, err := fromxl.GetImageSets()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	fmt.Println("ImageSets Write Mongo: ")
-	ids, err := mong.InsertImageSetsMongo(ctx, database.Collection("imageset"), imageSets)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	fmt.Println("ImageSets Write XL: ")
-	err = toxl.WriteToXL("ImageSets", ids)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	fmt.Println("ImageSets Gets: ")
-	allImageSets, imageSetMap, err := mong.GetImageSetMaps(ctx, database.Collection("imageset"))
+	imageSets, err := fromxl.GetImageSetNameMap()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	fmt.Println("Exers: ")
-	exercises, err := fromxl.GetExercises(allImageSets)
+	exercises, err := fromxl.GetExercises(imageSets)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -89,7 +68,7 @@ func main() {
 	}
 
 	fmt.Println("Dynamics: ")
-	dynamics, err := fromxl.GetDynamics(allImageSets)
+	dynamics, err := fromxl.GetDynamics(imageSets)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -110,7 +89,7 @@ func main() {
 	}
 
 	fmt.Println("Statics: ")
-	statics, err := fromxl.GetStatics(allImageSets)
+	statics, err := fromxl.GetStatics(imageSets)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -131,7 +110,7 @@ func main() {
 	}
 
 	fmt.Println("Samples: ")
-	samples, err := fromxl.GetSampleAndProcess(database, ctx, imageSetMap)
+	samples, err := fromxl.GetSampleAndProcess(database, ctx, imageSets)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -152,7 +131,7 @@ func main() {
 	}
 
 	fmt.Println("Transitions: ")
-	transition, err := fromxl.GetTransitions(allImageSets)
+	transition, err := fromxl.GetTransitions(imageSets)
 	if err != nil {
 		fmt.Println(err)
 		return

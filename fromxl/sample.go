@@ -13,7 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func GetSampleAndProcess(database *mongo.Database, ctx context.Context, imageSetMap map[string]assets.ImageSet) ([]assets.Sample, error) {
+func GetSampleAndProcess(database *mongo.Database, ctx context.Context, imageSetMap map[string]string) ([]assets.Sample, error) {
 	samples := []assets.Sample{}
 
 	f, err := excelize.OpenFile("assets/posesaxl.xlsx")
@@ -111,12 +111,12 @@ func GetSampleAndProcess(database *mongo.Database, ctx context.Context, imageSet
 	return samples, nil
 }
 
-func createRepExer(secs float32, exer assets.Exercise, imageSetMap map[string]assets.ImageSet) assets.Rep {
+func createRepExer(secs float32, exer assets.Exercise, imageSetMap map[string]string) assets.Rep {
 	ret := assets.Rep{}
 
 	if len(exer.PositionSlice2) == 0 {
 
-		positions, times := [][]string{}, []float32{}
+		positions, times := []string{}, []float32{}
 		copySecs := secs
 
 		for _, pos := range exer.PositionSlice1 {
@@ -130,7 +130,7 @@ func createRepExer(secs float32, exer assets.Exercise, imageSetMap map[string]as
 			} else {
 				times = append(times, pos.PercentSecs*copySecs)
 			}
-			positions = append(positions, imageSetMap[pos.ImageSetID].Mid)
+			positions = append(positions, imageSetMap[pos.ImageSetID])
 		}
 
 		ret.Positions = positions
@@ -138,7 +138,7 @@ func createRepExer(secs float32, exer assets.Exercise, imageSetMap map[string]as
 		ret.Times = times
 	} else {
 
-		positions, times := [][]string{}, []float32{}
+		positions, times := []string{}, []float32{}
 		copySecs := secs
 
 		for _, pos := range exer.PositionSlice1 {
@@ -158,7 +158,7 @@ func createRepExer(secs float32, exer assets.Exercise, imageSetMap map[string]as
 			} else {
 				times = append(times, pos.PercentSecs*copySecs)
 			}
-			positions = append(positions, imageSetMap[pos.ImageSetID].Mid)
+			positions = append(positions, imageSetMap[pos.ImageSetID])
 		}
 		for _, pos := range exer.PositionSlice2 {
 			if pos.Hardcoded {
@@ -166,7 +166,7 @@ func createRepExer(secs float32, exer assets.Exercise, imageSetMap map[string]as
 			} else {
 				times = append(times, pos.PercentSecs*copySecs)
 			}
-			positions = append(positions, imageSetMap[pos.ImageSetID].Mid)
+			positions = append(positions, imageSetMap[pos.ImageSetID])
 		}
 
 		ret.Positions = positions
@@ -177,15 +177,15 @@ func createRepExer(secs float32, exer assets.Exercise, imageSetMap map[string]as
 	return ret
 }
 
-func createRepDynamic(secs float32, stretch assets.DynamicStr, imageSetMap map[string]assets.ImageSet) assets.Rep {
+func createRepDynamic(secs float32, stretch assets.DynamicStr, imageSetMap map[string]string) assets.Rep {
 	ret := assets.Rep{}
 
 	if len(stretch.PositionSlice2) == 0 {
 
-		positions, times := [][]string{}, []float32{}
+		positions, times := []string{}, []float32{}
 		for _, pos := range stretch.PositionSlice1 {
 			times = append(times, pos.PercentSecs*secs)
-			positions = append(positions, imageSetMap[pos.ImageSetID].Mid)
+			positions = append(positions, imageSetMap[pos.ImageSetID])
 		}
 
 		ret.Positions = positions
@@ -193,14 +193,14 @@ func createRepDynamic(secs float32, stretch assets.DynamicStr, imageSetMap map[s
 		ret.Times = times
 	} else {
 
-		positions, times := [][]string{}, []float32{}
+		positions, times := []string{}, []float32{}
 		for _, pos := range stretch.PositionSlice1 {
 			times = append(times, pos.PercentSecs*secs)
-			positions = append(positions, imageSetMap[pos.ImageSetID].Mid)
+			positions = append(positions, imageSetMap[pos.ImageSetID])
 		}
 		for _, pos := range stretch.PositionSlice2 {
 			times = append(times, pos.PercentSecs*secs)
-			positions = append(positions, imageSetMap[pos.ImageSetID].Mid)
+			positions = append(positions, imageSetMap[pos.ImageSetID])
 		}
 
 		ret.Positions = positions
@@ -211,19 +211,19 @@ func createRepDynamic(secs float32, stretch assets.DynamicStr, imageSetMap map[s
 	return ret
 }
 
-func createRepStatic(secs float32, stretch assets.StaticStr, imageSetMap map[string]assets.ImageSet) assets.Rep {
+func createRepStatic(secs float32, stretch assets.StaticStr, imageSetMap map[string]string) assets.Rep {
 
 	ret := assets.Rep{}
 
 	if stretch.ImageSetID2 == "" {
-		positions := imageSetMap[stretch.ImageSetID1].Mid
-		ret.Positions = [][]string{positions}
+		positions := imageSetMap[stretch.ImageSetID1]
+		ret.Positions = []string{positions}
 		ret.FullTime = secs
 		ret.Times = []float32{secs}
 	} else {
-		positions1 := imageSetMap[stretch.ImageSetID1].Mid
-		positions2 := imageSetMap[stretch.ImageSetID2].Mid
-		ret.Positions = [][]string{positions1, positions2}
+		positions1 := imageSetMap[stretch.ImageSetID1]
+		positions2 := imageSetMap[stretch.ImageSetID2]
+		ret.Positions = []string{positions1, positions2}
 		ret.FullTime = secs
 		ret.Times = []float32{secs / 2, secs / 2}
 	}

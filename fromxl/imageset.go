@@ -2,16 +2,14 @@ package fromxl
 
 import (
 	"fmt"
-	"i9posesa/assets"
 	"strconv"
 
 	"github.com/xuri/excelize/v2"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var arraySize = 6
 
-func GetImageSets() ([]assets.ImageSet, error) {
+func GetImageSetNameMap() (map[string]string, error) {
 	f, err := excelize.OpenFile("assets/posesaxl.xlsx")
 	if err != nil {
 		fmt.Println(err)
@@ -24,9 +22,9 @@ func GetImageSets() ([]assets.ImageSet, error) {
 		}
 	}()
 
-	imageSets := []assets.ImageSet{}
+	ret := map[string]string{}
 
-	for i := 3; i < 1000; i++ {
+	for i := 3; i < 1200; i++ {
 		name, err := f.GetCellValue("ImageSets", "B"+strconv.Itoa(i))
 		if err != nil {
 			return nil, err
@@ -36,90 +34,14 @@ func GetImageSets() ([]assets.ImageSet, error) {
 			break
 		}
 
-		current := assets.ImageSet{
-			Name: name,
-		}
-
-		id, err := f.GetCellValue("ImageSets", "A"+strconv.Itoa(i))
+		id, err := f.GetCellValue("ImageSets", "C"+strconv.Itoa(i))
 		if err != nil {
 			return nil, err
 		}
 
-		if id != "" {
-			primID, err := primitive.ObjectIDFromHex(id)
-			if err != nil {
-				return nil, err
-			}
-			current.ID = primID
-		}
-
-		start, low := 3, []string{}
-		for j := 0; j < arraySize; j++ {
-
-			columnName, err := excelize.ColumnNumberToName(start + j)
-			if err != nil {
-				return nil, err
-			}
-			val, err := f.GetCellValue("ImageSets", columnName+strconv.Itoa(i))
-			if err != nil {
-				return nil, err
-			}
-			low = append(low, val)
-
-		}
-		current.Low = low
-
-		start, mid := 3+arraySize, []string{}
-		for j := 0; j < arraySize; j++ {
-
-			columnName, err := excelize.ColumnNumberToName(start + j)
-			if err != nil {
-				return nil, err
-			}
-			val, err := f.GetCellValue("ImageSets", columnName+strconv.Itoa(i))
-			if err != nil {
-				return nil, err
-			}
-			mid = append(mid, val)
-
-		}
-		current.Mid = mid
-
-		start, high := 3+(2*arraySize), []string{}
-		for j := 0; j < arraySize; j++ {
-
-			columnName, err := excelize.ColumnNumberToName(start + j)
-			if err != nil {
-				return nil, err
-			}
-			val, err := f.GetCellValue("ImageSets", columnName+strconv.Itoa(i))
-			if err != nil {
-				return nil, err
-			}
-			high = append(high, val)
-
-		}
-		current.High = high
-
-		start, original := 3+(3*arraySize), []string{}
-		for j := 0; j < arraySize; j++ {
-
-			columnName, err := excelize.ColumnNumberToName(start + j)
-			if err != nil {
-				return nil, err
-			}
-			val, err := f.GetCellValue("ImageSets", columnName+strconv.Itoa(i))
-			if err != nil {
-				return nil, err
-			}
-			original = append(original, val)
-
-		}
-		current.Original = original
-
-		imageSets = append(imageSets, current)
+		ret[name] = id
 
 	}
 
-	return imageSets, nil
+	return ret, nil
 }

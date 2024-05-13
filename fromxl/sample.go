@@ -83,7 +83,7 @@ func GetSampleAndProcess(database *mongo.Database, ctx context.Context, imageSet
 			if err != nil {
 				return nil, err
 			}
-			samples[len(samples)-1].ExOrStID = exer.ID.Hex()
+			samples[len(samples)-1].ExOrStID = exer.BackendID
 			samples[len(samples)-1].Reps = createRepExer(secs, exer, imageSetMap)
 
 		} else if dtype == "Static Stretch" {
@@ -91,7 +91,7 @@ func GetSampleAndProcess(database *mongo.Database, ctx context.Context, imageSet
 			if err != nil {
 				return nil, err
 			}
-			samples[len(samples)-1].ExOrStID = static.ID.Hex()
+			samples[len(samples)-1].ExOrStID = static.BackendID
 			samples[len(samples)-1].Reps = createRepStatic(secs, static, imageSetMap)
 
 		} else if dtype == "Dynamic Stretch" {
@@ -99,7 +99,7 @@ func GetSampleAndProcess(database *mongo.Database, ctx context.Context, imageSet
 			if err != nil {
 				return nil, err
 			}
-			samples[len(samples)-1].ExOrStID = dynamic.ID.Hex()
+			samples[len(samples)-1].ExOrStID = dynamic.BackendID
 			samples[len(samples)-1].Reps = createRepDynamic(secs, dynamic, imageSetMap)
 
 		} else {

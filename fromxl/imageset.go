@@ -7,8 +7,6 @@ import (
 	"github.com/xuri/excelize/v2"
 )
 
-var arraySize = 6
-
 func GetImageSetNameMap() (map[string]string, error) {
 	f, err := excelize.OpenFile("assets/posesaxl.xlsx")
 	if err != nil {
